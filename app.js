@@ -1,26 +1,22 @@
 const readline = require('readline');
 const validator = require('validator');
 const fs = require('fs');
-// const { json } = require('stream/consumers');
 const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
 });
-
-// const data = [];
 var filename = "data/contact.json";
-rl.question("siapa nama kamu? " , function(param){
-    nama = param;
-    rl.question(" email kamu? " , function(param){
-        if (validator.isEmail(param)  == true) {
-            email = param    
-            rl.question(" nomer hp? ", function(param){
-                if (validator.isMobilePhone(param,'id-ID')  == true) {
-                    nomer = param
+
+
+rl.question("siapa nama kamu? " , function(nama){
+    rl.question(" email kamu? " , function(email){
+        if (validator.isEmail(email)  == true) {
+            rl.question(" nomer hp? ", function(nomerhp){
+                if (validator.isMobilePhone(nomerhp,'id-ID')  == true) {
                     console.log(
                     'Nama : '+nama,
                     'Email : '+email,
-                    'Nomer Hp: '+nomer
+                    'Nomer Hp: '+nomerhp
                     );
                  fs.readFile('data/contact.json', 'utf8', ( err, data )=>{
                     if (err) {
@@ -30,14 +26,15 @@ rl.question("siapa nama kamu? " , function(param){
                     json.push({
                         nama: nama,
                         email: email,
-                        nomer: nomer
+                        nomer: nomerhp
                     });
                    let parse = JSON.stringify(json);
-                    fs.writeFile(filename, parse, 'utf8', (err) => {
+                   fs.writeFile(filename, parse, 'utf8', (err) => {
                      if (err) {
                         console.log(err);
                      }
                      console.log("data berhasil di tambahkan");   
+                     rl.close()
                     });
                  });
                 }else{
@@ -47,6 +44,5 @@ rl.question("siapa nama kamu? " , function(param){
         }else{
             console.log('format email harus sesuai');
         }
-        rl.close()
-    });
+    }); 
 });
